@@ -48,6 +48,7 @@ module mips;
         RegDstE, 
         ALUSrcE, 
         ALUControlE,
+        MemtoRegE,
         MemWriteM,
         MemtoRegW,
         RegWriteW
@@ -56,17 +57,11 @@ module mips;
     // Hazard Unit
     wire StallF;
     wire StallD;
-    // wire BranchD;
     wire ForwardAD;
     wire ForwardBD;
     wire FlushE;
     wire [1:0] ForwardAE;
     wire [1:0] ForwardBE;
-    // wire MemtoRegE;
-    // wire RegWriteE;
-    // wire MemtoRegM;
-    // wire RegWriteM;
-    // wire RegWriteW;
     Hazard my_hzd (
         clk, 
         BranchD, 
@@ -94,7 +89,21 @@ module mips;
     wire [31:0] PCBranchD;
     wire [31:0] InstrD;
     wire [31:0] PCPlus4D;
-    IF my_if (clk, PCBranchD, PCSrcD, StallF, StallD, InstrD, PCPlus4D);
+    // initial begin
+    //     PCBranchD <= 23'b0;
+    //     PCSrcD <= 1;
+    //     StallF <= 0;
+    //     StallD <= 0;
+    // end
+    IF my_if (
+        clk, 
+        PCBranchD, 
+        PCSrcD, 
+        StallF, 
+        StallD, 
+        InstrD, 
+        PCPlus4D
+    );
 
     wire [31:0] ResultW;
     wire [31:0] ALUOutM;
@@ -164,4 +173,16 @@ module mips;
         ResultW, 
         WriteRegW
     );
+
+    // initial begin
+    //     #15;
+    //     forever begin
+    //         $display ($time, , "instr = %h", InstrD);
+    //         #50;
+    //     end
+    // end
+
+    initial begin
+        #10000 $finish;
+    end
 endmodule

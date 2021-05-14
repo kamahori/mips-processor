@@ -9,45 +9,91 @@ module Control
         output reg RegDstE, 
         output reg ALUSrcE, 
         output reg [2:0] ALUControlE,
+        output reg MemtoRegE,
         output reg MemWriteM,
         output reg MemtoRegW, 
         output reg RegWriteW
     );
     
     wire RegWriteD = ((Op == 6'b100011) || // lw
+                      (Op == 6'b001000) || // addi
+                      (Op == 6'b000000));  // R type
+    wire MemtoRegD =  (Op == 6'b100011);   // lw
+    wire MemWriteD =  (Op == 6'b101011);   // sw
+    wire   ALUSrcD = ((Op == 6'b100011) || // lw
+                      (Op == 6'b101011) || // sw
                       (Op == 6'b001000));  // addi
-    wire MemtoRegD = (Op == 6'b100011);
-    wire MemWriteD = (Op == 6'b101011);
+    wire   RegDstD =  (Op == 6'b000000);   // R type
+    assign BranchD =  (Op == 6'b000100);   // beq
+
     reg [2:0] ALUControlD;
-    wire ALUSrcD = ((Op == 6'b100011) || // lw
-                    (Op == 6'b101011) || // sw
-                    (Op == 6'b001000));  // addi
-    wire RegDstD = (Op == 6'b000000);
-    assign BranchD = (Op == 6'b000011); // beq
 
     initial begin
-        if (Op == 6'b0) begin
+        if (Op == 6'b000000) begin
+            // R type
             ALUControlD = 2'b10;
-        end else if (Op == 6'b000100 || Op == 6'b000101) begin
-            // BEQ, BNE
-            ALUControlD = 2'b01;
-        end else if (Op == 6'b100011 || 6'b101011) begin
-            // LW, SW
-            ALUControlD = 2'b00;
-        end else if (Op == 6'b001000) begin
-            // ADDI
-            ALUControlD = 2'b10;
+            casex (Funct)
+                // or
+                // 6'b101010: ALUControlD = 3'b001;
+
+                // add 
+                6'b100000: ALUControlD = 3'b010;
+
+                // nop
+                6'b000000: ALUControlD = 3'b000;
+
+                // subtract
+                6'b100010: ALUControlD = 3'b110;
+
+                // mult
+                6'b011000: ALUControlD = 3'b101;
+
+                // div
+                // 6'b011010: ALUControlD = 3'b111;
+
+            endcase
+        end 
+        
+        if (Op == 6'b000100) begin
+            // beq
+            ALUControlD = 3'b110;
+        end 
+        
+        if (Op == 6'b100011 || 6'b101011) begin
+            // lw, sw
+            ALUControlD = 3'b010;
+        end 
+        
+        if (Op == 6'b001000) begin
+            // addi
+            ALUControlD = 3'b010;
         end
     end
 
     reg RegWriteE;
-    reg MemtoRegE;
+    // reg MemtoRegE;
     reg MemWriteE;
 
     reg RegWriteM;
     reg MemtoRegM;
 
     assign PCSrcD = BranchD && EqualD;
+
+    initial begin
+        RegDstE <= 0;
+        ALUSrcE <= 0;
+        ALUControlE <= 3'b0;
+        MemtoRegE <= 0;
+        MemWriteM <= 0;
+        MemtoRegW <= 0;
+        RegWriteW <= 0;
+
+        ALUControlD <= 2'b0;
+        RegWriteE <= 0;
+        MemWriteE <= 0;
+        RegWriteM <= 0;
+        MemtoRegM <= 0;
+    end
 
     always @(posedge clk) begin
         RegWriteE <= RegWriteD;
@@ -68,5 +114,13 @@ module Control
         RegWriteW <= RegWriteM;
         MemtoRegW <= MemtoRegM;
     end
+
+    // initial begin
+    //     #15;
+    //     forever begin
+    //         $display ($time, , "Op = %h, Funct = %h", Op, Funct);
+    //         #50;
+    //     end
+    // end
 
 endmodule

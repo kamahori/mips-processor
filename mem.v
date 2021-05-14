@@ -7,13 +7,14 @@ module data_memory
         output reg [31:0] RD
     );
 
-    reg [31:0] data_mem [0:1023];
+    reg [31:0] data_mem [0:7];
 
     initial begin
         $readmemh("SampleData.txt", data_mem);
+        RD <= 0;
     end
 
-    always @(posedge clk) begin
+    always @(address or WD or WE) begin
         if (WE) begin
             data_mem[address] <= WD;
         end
@@ -34,12 +35,25 @@ module MEM
     );
 
     wire [31:0] ReadData;
-    wire [31:0] ReadDataW;
-    wire [31:0] ALUOutW;
+    reg [31:0] ReadDataW;
+    reg [31:0] ALUOutW;
     data_memory my_data_mem (clk, ALUOutM, WriteDataM, MemWriteM, ReadData);
 
-    always @(posedge clk) begin 
-        ResultW <= MemtoRegW ? ReadDataW : ALUOutW;
+    initial begin
+        ResultW <= 32'b0;
+        WriteRegW <= 5'b0;
+
+        ReadDataW <= 32'b0;
+        ALUOutW <= 32'b0;
+    end
+
+    always @(posedge clk) begin
+        ReadDataW <= ReadData;
+        ALUOutW <= ALUOutM;
         WriteRegW <= WriteRegM;
+    end
+
+    always @(MemtoRegW or ReadDataW or ALUOutW) begin 
+        ResultW <= MemtoRegW ? ReadDataW : ALUOutW;
     end
 endmodule
