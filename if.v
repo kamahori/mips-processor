@@ -6,7 +6,7 @@ module instruction_memory
     );
     
     reg valid;
-    reg [31:0] inst_mem [0:3];
+    reg [31:0] inst_mem [0:31];
 
     initial begin
         $readmemh("SampleInst.txt", inst_mem);
@@ -36,7 +36,7 @@ module instruction_memory
     //         //     $display ($time, , "%h: %h", i, inst_mem[i][31:0]);
     //         // end
     //         $display($time, , "adr %h, RD %h", address, RD);
-    //         #50;
+    //         #100;
     //     end
     // end
 endmodule
@@ -104,10 +104,10 @@ module IF
     // initial begin
     //     #15;
     //     forever begin
-    //         $display ($time, , "StallF = %h, PCPlus4D = %h", StallF, PCPlus4D);
+    //         $display ($time, , "InstrD = %h, PCPlus4D = %h", InstrD, PCPlus4D);
     //         $display ($time, , "PCF = %h, RD = %h, instr = %h", PCF, RD, InstrD);
     //         $display ($time, , "PCSrcD = %h, PCBranchD = %h, PCPlus4F = %h, PC_ = %h", PCSrcD, PCBranchD, PCPlus4F, PC_);
-    //         #50;
+    //         #100;
     //     end
     // end
 endmodule

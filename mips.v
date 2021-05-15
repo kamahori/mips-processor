@@ -178,11 +178,11 @@ module mips;
     //     #15;
     //     forever begin
     //         $display ($time, , "instr = %h", InstrD);
-    //         #50;
+    //         #100;
     //     end
     // end
 
     initial begin
-        #10000 $finish;
+        #1000 $finish;
     end
 endmodule

@@ -29,17 +29,17 @@ module register_file
 
     integer i;
     initial begin
-        #20;
+        #50;
         forever begin
-            $display ($time, , "%h: %h", i, reg_file[8][31:0]);
-            $display ($time, , "%h: %h", i, reg_file[9][31:0]);
-            $display ($time, , "%h: %h", i, reg_file[16][31:0]);
+            $display ($time, , "t0: %h", reg_file[8][31:0]);
+            $display ($time, , "t1: %h", reg_file[9][31:0]);
+            $display ($time, , "s0: %h", reg_file[16][31:0]);
             // for (i = 0; i < 32; i = i + 1) begin
             //     $display ($time, , "%h: %h", i, reg_file[i][31:0]);
             // end
             // $display ($time, , "WE3: %h, WD3: %h", WE3, WD3);
             $display ("");
-            #50;
+            #200;
         end
     end
 endmodule 
@@ -145,9 +145,11 @@ module ID
     // initial begin
     //     #15;
     //     forever begin
-    //         $display ($time, , "RsD = %h, RtD = %h, RdD = %h", RsD, RtD, RdD);
+    //         $display ($time, , "A = %h, B = %h, SignImmE = %h", A, B, SignImmE);
+    //         $display ($time, , "A1=%h, A2=%h, A3=%h, RD1=%h, RD2=%h", A1, A2, A3, RD1, RD2);
+    //         // $display ($time, , "RsD = %h, RtD = %h, RdD = %h", RsD, RtD, RdD);
     //         $display ($time, , "RsE = %h, RtE = %h, RdE = %h", RsE, RtE, RdE);
-    //         #50;
+    //         #100;
     //     end
     // end
 endmodule 

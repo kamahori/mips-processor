@@ -29,6 +29,22 @@ module Control
     reg [2:0] ALUControlD;
 
     initial begin
+        RegDstE <= 0;
+        ALUSrcE <= 0;
+        ALUControlE <= 3'b0;
+        MemtoRegE <= 0;
+        MemWriteM <= 0;
+        MemtoRegW <= 0;
+        RegWriteW <= 0;
+
+        ALUControlD <= 2'b0;
+        RegWriteE <= 0;
+        MemWriteE <= 0;
+        RegWriteM <= 0;
+        MemtoRegM <= 0;
+    end
+
+    always @(Op) begin
         if (Op == 6'b000000) begin
             // R type
             ALUControlD = 2'b10;
@@ -79,22 +95,6 @@ module Control
 
     assign PCSrcD = BranchD && EqualD;
 
-    initial begin
-        RegDstE <= 0;
-        ALUSrcE <= 0;
-        ALUControlE <= 3'b0;
-        MemtoRegE <= 0;
-        MemWriteM <= 0;
-        MemtoRegW <= 0;
-        RegWriteW <= 0;
-
-        ALUControlD <= 2'b0;
-        RegWriteE <= 0;
-        MemWriteE <= 0;
-        RegWriteM <= 0;
-        MemtoRegM <= 0;
-    end
-
     always @(posedge clk) begin
         RegWriteE <= RegWriteD;
         MemtoRegE <= MemtoRegD;
@@ -118,9 +118,9 @@ module Control
     // initial begin
     //     #15;
     //     forever begin
-    //         $display ($time, , "Op = %h, Funct = %h", Op, Funct);
-    //         #50;
+    //         $display ($time, , "MemtoRegD = %h", MemtoRegD);
+    //         $display ($time, , "ALUControlD = %h, ALUControlE = %h", ALUControlD, ALUControlE);
+    //         #100;
     //     end
     // end
-
 endmodule

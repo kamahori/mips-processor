@@ -56,4 +56,13 @@ module MEM
     always @(MemtoRegW or ReadDataW or ALUOutW) begin 
         ResultW <= MemtoRegW ? ReadDataW : ALUOutW;
     end
+
+    // initial begin
+    //     #15;
+    //     forever begin
+    //         $display ($time, , "ReadDataW = %h, ALUOutW = %h, WriteRegW = %h", ReadDataW, ALUOutW, WriteRegW);
+    //         $display ($time, , "ResultW = %h, MemtoRegW = %h", ResultW, MemtoRegW);
+    //         #100;
+    //     end
+    // end
 endmodule

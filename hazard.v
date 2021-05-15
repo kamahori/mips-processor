@@ -39,12 +39,16 @@ module Hazard
     end
 
     always @(RsD or RtE or RtD or MemtoRegE) begin
-        lwstall <= ((RsD == RtE) || (RtD == RtE)) && MemtoRegE;
+        if (RsD != 0 || RtE != 0 || RtD != 0) begin 
+            lwstall <= ((RsD == RtE) || (RtD == RtE)) && MemtoRegE;
+        end
     end 
 
     always @(BranchD or RegWriteE or WriteRegE or MemtoRegM or WriteRegM or RsD or RtD) begin
-        branchstall <= (BranchD && RegWriteE && (WriteRegE == RsD || WriteRegE == RtD)) ||
-                       (BranchD && MemtoRegM && (WriteRegM == RsD || WriteRegM == RtD));
+        if (RsD != 0 || RtD != 0) begin 
+            branchstall <= (BranchD && RegWriteE && (WriteRegE == RsD || WriteRegE == RtD)) ||
+                           (BranchD && MemtoRegM && (WriteRegM == RsD || WriteRegM == RtD));
+        end
     end
     
     always @(RsE or WriteRegM or RegWriteM) begin
@@ -83,7 +87,8 @@ module Hazard
     //     forever begin
     //         $display ($time, , "RsD=%h RtE=%h RtD=%h MemtoRegE=%h", RsD, RtE, RtD, MemtoRegE);
     //         $display ($time, , "lwstall = %h, branchstall = %h", lwstall, branchstall);
-    //         #50;
+    //         $display ($time, , "StallF = %h, StallD = %h, FlushE = %h", StallF, StallD, FlushE);
+    //         #100;
     //     end
     // end
 endmodule
