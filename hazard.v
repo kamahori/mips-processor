@@ -81,14 +81,4 @@ module Hazard
         ForwardAD <= (RsD != 0) && (RsD == WriteRegM) && RegWriteM;
         ForwardBD <= (RtD != 0) && (RtD == WriteRegM) && RegWriteM;
     end
-
-    // initial begin
-    //     #15;
-    //     forever begin
-    //         $display ($time, , "RsD=%h RtE=%h RtD=%h MemtoRegE=%h", RsD, RtE, RtD, MemtoRegE);
-    //         $display ($time, , "lwstall = %h, branchstall = %h", lwstall, branchstall);
-    //         $display ($time, , "StallF = %h, StallD = %h, FlushE = %h", StallF, StallD, FlushE);
-    //         #100;
-    //     end
-    // end
 endmodule

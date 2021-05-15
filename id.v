@@ -29,17 +29,13 @@ module register_file
 
     integer i;
     initial begin
-        #50;
+        #250;
         forever begin
             $display ($time, , "t0: %h", reg_file[8][31:0]);
             $display ($time, , "t1: %h", reg_file[9][31:0]);
             $display ($time, , "s0: %h", reg_file[16][31:0]);
-            // for (i = 0; i < 32; i = i + 1) begin
-            //     $display ($time, , "%h: %h", i, reg_file[i][31:0]);
-            // end
-            // $display ($time, , "WE3: %h, WD3: %h", WE3, WD3);
             $display ("");
-            #200;
+            #100;
         end
     end
 endmodule 
@@ -90,12 +86,10 @@ module ID
     wire [31:0] RD2;
     reg [31:0] RD1_;
     reg [31:0] RD2_;
-    // assign EqualD = (RD1_ == RD2_);
     assign RsD = InstrD[25:21];
     assign RtD = InstrD[20:16];
     wire [4:0] RdD = InstrD[15:11];
     wire [31:0] SignImmD;
-    // assign PCBranchD = SignImmD * 4 + PCPlus4D;
     register_file my_reg_file (clk, A1, A2, A3, WD3, RegWriteW, RD1, RD2);
     sign_extend my_sign_ex (InstrD[15:0], SignImmD);
 
@@ -111,8 +105,6 @@ module ID
 
         RD1_ <= 32'b0;
         RD2_ <= 32'b0;
-        // RsD <= 5'b0;
-        // RtD <= 5'b0;
     end
 
     always @(SignImmD or PCPlus4D) begin
@@ -132,8 +124,6 @@ module ID
         if (~FlushE) begin 
             A <= RD1_;
             B <= RD2_;
-            // Op <= InstrD[31:26];
-            // Funct <= InstrD[5:0];
 
             RsE <= RsD;
             RtE <= RtD;
@@ -141,15 +131,4 @@ module ID
             SignImmE <= SignImmD;
         end
     end
-
-    // initial begin
-    //     #15;
-    //     forever begin
-    //         $display ($time, , "A = %h, B = %h, SignImmE = %h", A, B, SignImmE);
-    //         $display ($time, , "A1=%h, A2=%h, A3=%h, RD1=%h, RD2=%h", A1, A2, A3, RD1, RD2);
-    //         // $display ($time, , "RsD = %h, RtD = %h, RdD = %h", RsD, RtD, RdD);
-    //         $display ($time, , "RsE = %h, RtE = %h, RdE = %h", RsE, RtE, RdE);
-    //         #100;
-    //     end
-    // end
 endmodule 

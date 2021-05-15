@@ -87,7 +87,6 @@ module Control
     end
 
     reg RegWriteE;
-    // reg MemtoRegE;
     reg MemWriteE;
 
     reg RegWriteM;
@@ -114,13 +113,4 @@ module Control
         RegWriteW <= RegWriteM;
         MemtoRegW <= MemtoRegM;
     end
-
-    // initial begin
-    //     #15;
-    //     forever begin
-    //         $display ($time, , "MemtoRegD = %h", MemtoRegD);
-    //         $display ($time, , "ALUControlD = %h, ALUControlE = %h", ALUControlD, ALUControlE);
-    //         #100;
-    //     end
-    // end
 endmodule
